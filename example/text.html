@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="./lib/jquery-v3.5.1/jquery-3.5.1.js"></script>
+    <script src="../dist/index.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+</head>
+<body>
+    
+</body>
+<script>
+    let options = [
+        {
+            url:"/aaa",
+            type:"fuzzy",
+        },{
+            url:"/bbb",
+            type:"precise",
+        },{
+            url:"/aaa/bbb",
+            type:"fuzzy",
+        },{
+            url:"/aaa/bbb",
+            type:"precise",
+        },{
+            url:"http://jsonplaceholder.typicode.com",
+            type:"fuzzy",
+            keepTime:5000,
+            
+            //keepTime:5000,
+            local:"storage"
+        },
+    ];  
+        let a = new THCache(options);
+        axios = a.bindHttp(axios);
+        let c = axios.get('http://jsonplaceholder.typicode.com/users?aa=1&bb=2',{
+            params:{
+                bb:4,
+                cc:3,
+            }
+        });
+        axios({
+            method:"post",
+            url:"http://jsonplaceholder.typicode.com/users",
+            data:{
+                firstName: 'Fred',
+                lastName: 'Flintstone'
+            }
+        });
+        axios.interceptors.response.use();
+        let d = axios.create();
+        d({
+            method:"post",
+            url:"http://jsonplaceholder.typicode.com/users",
+            data:{
+                firstName: 'Fred',
+                lastName: 'Flintstone'
+            }
+        }).then(response=>{
+            console.log("rrrrrrrrrrrrrrrr",response)
+        })
+        
+        function users(){
+            axios.post('http://jsonplaceholder.typicode.com/users', {
+            firstName: 'Fred',
+            lastName: 'Flintstone'
+        })
+        .then(function (response) {
+         //console.log(response);
+        })
+        }
+
+        //setInterval(users,1000)
+        
+</script>
+</html>
