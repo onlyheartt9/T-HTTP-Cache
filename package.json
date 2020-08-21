@@ -15,7 +15,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/onlyheartt9/THCache.git"
+    "url": "git+https://github.com/onlyheartt9/T-HTTP-Cache.git"
   },
   "keywords": [
     "T-HTTP-Cache"
@@ -23,27 +23,27 @@
   "author": "challenger",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/onlyheartt9/THCache/issues"
+    "url": "https://github.com/onlyheartt9/T-HTTP-Cache/issues"
   },
-  "homepage": "https://github.com/onlyheartt9/THCache#readme",
+  "homepage": "https://github.com/onlyheartt9/T-HTTP-Cache#readme",
   "dependencies": {
     "@onlyheartt9/t-cache": "^1.0.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.11.1",
+    "@babel/core": "^7.11.4",
     "@babel/plugin-proposal-optional-chaining": "^7.11.0",
     "@babel/preset-env": "^7.11.0",
     "babel-plugin-external-helpers": "^6.22.0",
-    "cross-env": "^5.0.5",
-    "rollup": "^1.0.0",
-    "rollup-plugin-alias": "^1.3.1",
+    "cross-env": "^7.0.2",
+    "rollup": "^2.26.4",
+    "rollup-plugin-alias": "^2.2.0",
     "rollup-plugin-babel": "^4.4.0",
-    "rollup-plugin-buble": "^0.19.6",
-    "rollup-plugin-commonjs": "^9.2.0",
+    "rollup-plugin-buble": "^0.19.8",
+    "rollup-plugin-commonjs": "^10.1.0",
     "rollup-plugin-flow-no-whitespace": "^1.0.0",
-    "rollup-plugin-node-resolve": "^4.0.0",
-    "rollup-plugin-replace": "^2.0.0",
-    "webpack": "~4.28.4",
-    "webpack-dev-server": "^2.9.1"
+    "rollup-plugin-node-resolve": "^5.2.0",
+    "rollup-plugin-replace": "^2.2.0",
+    "webpack": "~4.44.1",
+    "webpack-dev-server": "^3.11.0"
   }
 }
