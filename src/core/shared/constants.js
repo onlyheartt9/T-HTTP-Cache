@@ -7,4 +7,4 @@ export const FOREVER_TYPE = "forever";
 export const LOCALSTORAGE_TYPE = "storage";
 export const LOCALSTORAGE_TYPE_DEFAULT = "default";
 export const LOCALSTORAGE_KEY = "HTTP-CACHE:";
-export const METHODS = ["get", "post",'delete', 'head', 'options','put', 'patch'];
+export const METHODS = ["get", "post", 'delete', 'head', 'options', 'put', 'patch'];

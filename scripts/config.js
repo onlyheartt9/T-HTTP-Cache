@@ -18,10 +18,10 @@ const banner =
   ' */'
 
 const weexFactoryPlugin = {
-  intro () {
+  intro() {
     return 'module.exports = function weexFactory (exports, document) {'
   },
-  outro () {
+  outro() {
     return '}'
   }
 }
@@ -222,17 +222,17 @@ const builds = {
     format: 'umd',
     env: 'production',
     alias: { he: './entity-decoder' },
-    plugins: [node(),cjs(),babel({
+    plugins: [node(), cjs(), babel({
       exclude: 'node_modules/**',
     })],
-    interop:false,
+    interop: false,
     banner
   },
   'web-runtime-cjs-prod': {
     entry: resolve('src/core/index.js'),
     dest: resolve('dist/thcache.common.prod.js'),
     format: 'cjs',
-    plugins: [node(),cjs(),babel({
+    plugins: [node(), cjs(), babel({
       exclude: 'node_modules/**',
     })],
     env: 'production',
@@ -240,7 +240,7 @@ const builds = {
   },
 }
 
-function genConfig (name) {
+function genConfig(name) {
   const opts = builds[name]
   const config = {
     input: opts.entry,
