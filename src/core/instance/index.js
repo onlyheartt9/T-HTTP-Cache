@@ -3,8 +3,8 @@ import { apiMixin } from "./api";
 
 
 function THCache(options) {
-    //bind(http);
-    options&&this._init(options);
+  //bind(http);
+  options && this._init(options);
 }
 
 initMixin(THCache);
