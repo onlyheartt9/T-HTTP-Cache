@@ -217,7 +217,7 @@ const resolve = p => {
 
 const builds = {
   'web-full-prod': {
-    entry: resolve('src/core/index.js'),
+    entry: resolve('src/core/umdIndex.js'),
     dest: resolve('dist/index.js'),
     format: 'umd',
     env: 'production',
@@ -225,6 +225,7 @@ const builds = {
     plugins: [node(),cjs(),babel({
       exclude: 'node_modules/**',
     })],
+    interop:false,
     banner
   },
   'web-runtime-cjs-prod': {
@@ -252,7 +253,7 @@ function genConfig (name) {
       file: opts.dest,
       format: opts.format,
       banner: opts.banner,
-      name: opts.moduleName || 'THCache'
+      name: opts.moduleName || 'THCache',
     },
     onwarn: (msg, warn) => {
       if (!/Circular/.test(msg)) {

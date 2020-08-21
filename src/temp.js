@@ -4,4 +4,5 @@ let options = [{
     keepTime:3||"forever",
     local:"defalut"||"storage",
     excludes:["/aaa/bbb"],
+    method:"get"
 }]

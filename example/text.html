@@ -25,32 +25,52 @@
         },{
             url:"/aaa/bbb",
             type:"precise",
-        },{
+        },
+        {
             url:"http://jsonplaceholder.typicode.com",
             type:"fuzzy",
+            method:"post",
             keepTime:5000,
-            
             //keepTime:5000,
-            local:"storage"
+            //local:"storage",
+            //excludes:["http://jsonplaceholder.typicode.com/users"],
+            
+        },
+        {
+            url:"",
+            type:"fuzzy",
+            method:"all",
+            keepTime:1000,
+            //keepTime:5000,
+            local:"storage",
+            //excludes:["http://jsonplaceholder.typicode.com/users"],
+            
         },
     ];  
         let a = new THCache(options);
-        axios = a.bindHttp(axios);
-        let c = axios.get('http://jsonplaceholder.typicode.com/users?aa=1&bb=2',{
-            params:{
-                bb:4,
-                cc:3,
-            }
-        });
+        // axios.interceptors.request.use((config)=>{
+        //     console.log("req1111111");
+        //     return config
+        // });
+        // axios.interceptors.request.use((config)=>{
+        //     console.log("req22222222")
+        //     return config
+        // });
+        // axios.interceptors.request.use((config)=>{
+        //     console.log("req333333")
+        //     return config
+        // });
+        axios = TBindAxios(axios);
+        
         axios({
-            method:"post",
+            method:"GET",
             url:"http://jsonplaceholder.typicode.com/users",
             data:{
                 firstName: 'Fred',
                 lastName: 'Flintstone'
             }
         });
-        axios.interceptors.response.use();
+        
         let d = axios.create();
         d({
             method:"post",
@@ -62,18 +82,47 @@
         }).then(response=>{
             console.log("rrrrrrrrrrrrrrrr",response)
         })
+        function get(){
+            let c = axios.get('http://jsonplaceholder.typicode.com/users?aa=1&bb=2',{
+            params:{
+                bb:4,
+                cc:3,
+            }
+            }).then(res=>{
+                console.log("3333333",res)
+            });
+        }
         
         function users(){
-            axios.post('http://jsonplaceholder.typicode.com/users', {
+            axios.post('http://jsonplaceholder.typico1de.com/users', {
             firstName: 'Fred',
             lastName: 'Flintstone'
-        })
-        .then(function (response) {
+        },{
+            params:{
+                lastName:"123123"
+            }
+        }).then(function (response) {
          //console.log(response);
-        })
+         console.log(2222222,response)
+        }).catch(e=>{console.log(e)})
+        }
+        
+
+        function delete1(){
+            axios.delete('http://jsonplaceholder.typicode.com/users', {
+                data:{
+                firstName: 'Fred',
+                lastName: 'Flintstone'
+                },
+                params:{
+                    lastName: '123123'
+                }
+            })
+            .then(function (response) {
+            console.log(2222222,response)
+            })
         }
 
-        //setInterval(users,1000)
         
 </script>
 </html>
