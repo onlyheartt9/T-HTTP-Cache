@@ -15,8 +15,8 @@ import {
 
 const cacheData = new TCache(HTTP_CACHE_DATA);
 const defaultKeepTime = 3000;//默认保存时间
-const preciseMap = new TCache(PRECISE_OPTIONS);
-const fuzzyMap = new TCache(FUZZY_OPTIONS);
+export const preciseMap = new TCache(PRECISE_OPTIONS);
+export const fuzzyMap = new TCache(FUZZY_OPTIONS);
 var toString = Object.prototype.toString;
 
 //解析option选项，缓存到缓存类中
