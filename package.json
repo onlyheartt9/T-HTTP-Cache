@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/onlyheartt9/T-HTTP-Cache#readme",
   "dependencies": {
-    "@onlyheartt9/t-cache": "^1.0.3"
+    "@onlyheartt9/t-cache": "^1.0.4"
   },
   "devDependencies": {
     "@babel/core": "^7.11.4",
