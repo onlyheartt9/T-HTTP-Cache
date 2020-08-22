@@ -12,13 +12,16 @@
 
 ##### 如何运行
 
+```shell
 1. yarn
 2. yarn build
+```
 
 ##### 如何测试
 
-3. yarn test
-4. open example/lib/test.html
-5.
+```shell
+1. yarn test
+2. open example/lib/test.html
+```
 
 ##### 如何提交代码
