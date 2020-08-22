@@ -5,7 +5,7 @@
   "main": "dist/thcache.common.prod.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "cross-env NODE_ENV=development webpack-dev-server --open --hot",
+    "dev": "rollup -w -c scripts/config.js --sourcemap --environment TARGET:web-full-dev",
     "build": "node scripts/build.js",
     "upload": "npm publish --access=public",
     "build1": "cross-env NODE_ENV=production webpack --progress --hide-modules"

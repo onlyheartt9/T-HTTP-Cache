@@ -26,6 +26,12 @@ export function commonRequestFilter(cacheKeyOpt) {
   const option = getOptionByUrl(url, method);
   const cacheKey = getCacheKey(cacheKeyOpt);
   const response = getHttpCacheByKey(cacheKey);
+  debug(()=>{
+    console.log("RequestFilter:",{
+      url,
+      option
+    })
+  })
   if (!option) {
     return "no option";
   }

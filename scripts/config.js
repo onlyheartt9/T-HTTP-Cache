@@ -216,6 +216,17 @@ const resolve = p => {
 
 
 const builds = {
+  'web-full-dev': {
+    entry: resolve('src/core/umdIndex.js'),
+    dest: resolve('dist/thcache.js'),
+    format: 'umd',
+    plugins: [node(), cjs(), babel({
+      exclude: 'node_modules/**',
+    })],
+    env: 'development',
+    alias: { he: './entity-decoder' },
+    banner
+  },
   'web-full-prod': {
     entry: resolve('src/core/umdIndex.js'),
     dest: resolve('dist/index.js'),

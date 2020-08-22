@@ -1,3 +1,4 @@
+//OPTIONS参数模板
 let options = [{
   url: "/aaa",
   type: "precise" || "fuzzy",
