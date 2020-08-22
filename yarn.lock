@@ -828,10 +828,10 @@
     lodash "^4.17.19"
     to-fast-properties "^2.0.0"
 
-"@onlyheartt9/t-cache@^1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@onlyheartt9/t-cache/-/t-cache-1.0.3.tgz#fbab65d994e1792ee0d65ddd074a3fcc6712a442"
-  integrity sha512-8JnUkG/Cvul2PG5ymqCKNRmQDnGNRq/lBdxbSSEmOgiIfeHfZM1YcdFVpZgv1TTVIeEHx9mBTEmamWr3DrOu0g==
+"@onlyheartt9/t-cache@^1.0.4":
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/@onlyheartt9/t-cache/-/t-cache-1.0.4.tgz#8d8b152db3c1b95542ccd80e9a3a08ab5dc1eb83"
+  integrity sha512-QICY8J6bUUnzcGqmBkk1pW2gGJ9H2ACtaxWNui1Q9TVnRfvqYuxi3MVC4QOY1gwSwD95TZuC9TOfK5dqgAqO/g==
 
 "@types/estree@*":
   version "0.0.45"
