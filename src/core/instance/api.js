@@ -23,11 +23,9 @@ export function apiMixin(THCache) {
     setOption,
     setDebugger,
   };
-
   Object.keys(api).forEach((key) => {
-    THCache.prototype[key] = (...e) => {
-      let data = api[key](...e);
-      return key === "bindHttp" ? data : utils.clone(data);
+    THCache.prototype[key] = function(...e){
+      return api[key].call(this,...e);
     };
   });
 }

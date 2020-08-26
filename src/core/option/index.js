@@ -96,7 +96,7 @@ function checkOption(option) {
   option = utils.clone(option);
   option.type = option.type??PRECISE_TYPE;
   option.method = option.method??"all";
-  option.method = option.toLowerCase();
+  option.method = option.method.toLowerCase();
   option.keepTime = option.keepTime??defaultKeepTime;
   if (!option.url && option.url !== "") {
     throw new Error("option error:missing attribute 'url'");
