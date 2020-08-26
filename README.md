@@ -139,4 +139,4 @@ axios({
 
 **Axios拦截处理**
 
-![未命名文件 (8)](C:\Users\Administrator\Desktop\未命名文件 (8).png)
+![](./assets/axios.png)
