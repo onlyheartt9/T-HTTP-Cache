@@ -1,7 +1,8 @@
 import { getCacheKeyOptByRequest, getCacheKeyOptByResponse } from "./axiosUtils"
-import { commonRequestFilter, commonResponseFilter } from "../index";
+import { commonRequestFilter, commonResponseFilter, urlLoading, removeUrlLoading } from "../index";
 import utils from "../../utils/index";
 import { METHODS } from "../../shared/constants"
+import { getCacheKey } from "../../cache";
 /**
  *
  * @param {*} axios  axios
@@ -48,7 +49,7 @@ function extendMethods(axiosObj) {
   methods.forEach(methodName => {
     let method = axiosObj[methodName];
     axiosObj[methodName] = function (...e) {
-      return method(...e).catch(data => {
+      return method(...e).catch((data) => {
         return axiosFilter(data);
       });
     }
@@ -60,9 +61,13 @@ function extendMethods(axiosObj) {
  * @param {*} data 警告，或者为缓存数据
  */
 function axiosFilter(data) {
-  let { config, type = null } = data;
-  if (!type) {
+  let { config, type,_isCache=false} = data;
+  if (!_isCache) {
     let err = data;
+    //urlLoading中清除该请求
+    let cacheKey = utils.compose(getCacheKeyOptByRequest,getCacheKey)(config);
+    //let cacheKey = getCacheKey(getCacheKeyOptByRequest(config))
+    removeUrlLoading(cacheKey);
     return new Promise((resolve, reject) => {
       reject(err);
     })
@@ -79,13 +84,12 @@ function axiosFilter(data) {
 function registerRequestFilter(axiosObj) {
   let reqNum = -1;
   reqNum = axiosObj.interceptors.request.use(function (config) {
-    console.log("config", config)
     const cacheKeyOpt = getCacheKeyOptByRequest(config);
     let type = commonRequestFilter(cacheKeyOpt);
     if (type === "no option" || type === "normal") {
       return config;
     } else {
-      throw { config, type };
+      throw { config, type ,_isCache:true};
     }
   });
   let handlers = axiosObj.interceptors.request.handlers;
@@ -118,9 +122,11 @@ function registerResponseFilter(axiosObj) {
   function useFilter() {
     resNum = axiosObj.interceptors.response.use((response) => {
       const cacheKeyOpt = getCacheKeyOptByResponse(response);
-      response = commonResponseFilter(cacheKeyOpt, response);
-      return response
+      let ret = commonResponseFilter(cacheKeyOpt, response);
+      if(ret ==="no option"){
+        return response;
+      }
+      return ret
     }, "useFilter");
-    console.log(resNum)
   }
 }

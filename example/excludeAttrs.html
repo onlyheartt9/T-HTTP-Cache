@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="./lib/jquery-v3.5.1/jquery-3.5.1.js"></script>
+    <script src="../dist/thcache.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+  <body></body>
+  <script>
+    //可以通过excludeAttrs，指定符合匹配项的接口条件判断无视配置的属性
+    let options = [
+      {
+        url: "http://jsonplaceholder.typicode.com",
+        type: "fuzzy",
+        method: "post",
+        keepTime: "forever",
+        excludeAttrs: ["firstName", "lastName"],
+      },
+    ];
+    let a = new THCache();
+    let optKeys = a.setOptions(options);
+    axios = TBindAxios(axios);
+
+    function users() {
+      axios
+        .post("http://jsonplaceholder.typicode.com/users", {
+          firstName: "first",
+          lastName: "last",
+        })
+        .then(function (response) {
+          console.log("response", response);
+        })
+    }
+    function users1() {
+      axios
+        .post("http://jsonplaceholder.typicode.com/users", {
+          firstName: "next",
+          lastName: "next",
+        })
+        .then(function (response) {
+          console.log("response", response);
+        })
+    }
+    users();
+    setTimeout(user1,3000)
+</script>
+</html>

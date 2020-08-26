@@ -1,11 +1,10 @@
-import utils, { setStorgeHttpCache } from "../utils";
+import utils from "../utils";
+import { setStorgeHttpCache } from "../cache/index";
 import {
   LOCALSTORAGE_KEY,
 } from "../shared/constants";
 export function initMixin(THCache) {
-  THCache.prototype._init = function (options) {
-    //初始化配置项
-    this.setOptions(options);
+  THCache.prototype._init = function () {
     //对localStorage中数据添加入缓存中
     initHttpCache();
   }

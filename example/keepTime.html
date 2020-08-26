@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script src="./lib/jquery-v3.5.1/jquery-3.5.1.js"></script>
+    <script src="../dist/thcache.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+  </head>
+  <body></body>
+  <script>
+    let options = [
+      {
+        url: "http://jsonplaceholder.typicode.com",
+        type: "fuzzy",
+        method: "post",
+        keepTime: 5000,
+        excludes: ["http://jsonplaceholder.typicode.com/users"],
+      }
+    ];
+    let thc = new THCache();
+    let optKeys = thc.setOptions(options);
+    axios = TBindAxios(axios);
+
+    function users() {
+      axios
+        .post("http://jsonplaceholder.typicode.com/users", {
+          firstName: "Fred",
+          lastName: "Flintstone",
+        })
+        .then(function (response) {
+          console.log("response",response);
+        })
+    }
+    setInterval(users,2000)
+  </script>
+</html>
