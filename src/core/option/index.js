@@ -14,25 +14,28 @@ const fuzzyMap = new TCache(FUZZY_OPTIONS);
 const defaultKeepTime = 3000; //默认保存时间
 
 //对外暴露的api，根据标识获取cache
-export function getOptionByKey(optKey){
-  optKey = decodeOptionKey(optKey)
-  let {type} = parseOptionKey(optKey);
-  let map = type===PRECISE_TYPE?preciseMap:fuzzyMap;
-  let opt = map.get(optKey);
-  return opt
+export function getOptionByKey(optKey) {
+  try {
+    optKey = decodeOptionKey(optKey);
+    let { type } = parseOptionKey(optKey);
+    let map = type === PRECISE_TYPE ? preciseMap : fuzzyMap;
+    let opt = map.get(optKey);
+    return opt;
+  } catch (error) {
+    throw new Error("optKey is not exact");
+  }
 }
 
-
 //对optKey加密
-function encodeOptionKey(optKey){
+function encodeOptionKey(optKey) {
   return utils.encode(optKey);
 }
 //对optKey解密
-function decodeOptionKey(optKey){
+function decodeOptionKey(optKey) {
   return utils.decode(optKey);
 }
 //通过url获取配置项
-export function getOptionByUrl(url, method = "all") {
+export function getOptionByUrl({ url, method = "all" }) {
   let optKey = getOptionKey({ url, method, type: PRECISE_TYPE });
   let opt = preciseMap.get(optKey);
   if (!opt) {
@@ -93,23 +96,27 @@ export function parseOption(option) {
 
 //检查option对象是否格式正确
 function checkOption(option) {
+  //设置默认值
   option = utils.clone(option);
-  option.type = option.type??PRECISE_TYPE;
-  option.method = option.method??"all";
+  option.type = option.type ?? PRECISE_TYPE;
+  option.method = option.method ?? "all";
   option.method = option.method.toLowerCase();
-  option.keepTime = option.keepTime??defaultKeepTime;
+  option.keepTime = option.keepTime ?? defaultKeepTime;
+
   if (!option.url && option.url !== "") {
     throw new Error("option error:missing attribute 'url'");
   }
-  if(![PRECISE_TYPE,FUZZY_TYPE].includes(option.type)){
+  if (![PRECISE_TYPE, FUZZY_TYPE].includes(option.type)) {
     throw new Error("option error:wrong attribute 'type'");
   }
-  if(typeof option.keepTime!=="number"&&![TRIGGER_TYPE,FOREVER_TYPE].includes(option.keepTime)){
+  if (
+    typeof option.keepTime !== "number" &&
+    ![TRIGGER_TYPE, FOREVER_TYPE].includes(option.keepTime)
+  ) {
     throw new Error("option error:wrong attribute 'keepTime'");
   }
 
-  
-  return option
+  return option;
 }
 
 //根据配置项，解析唯一标识

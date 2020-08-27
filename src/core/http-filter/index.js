@@ -37,7 +37,7 @@ function dealCacheKeyOption(option, cacheKeyOpt) {
  */
 export function commonRequestFilter(cacheKeyOpt) {
   const { url, method } = cacheKeyOpt;
-  const option = getOptionByUrl(url, method);
+  const option = getOptionByUrl({url, method});
   debug(() => {
     console.log("RequestFilter:", {
       url,
@@ -72,7 +72,7 @@ export function commonRequestFilter(cacheKeyOpt) {
  */
 export function commonResponseFilter(cacheKeyOpt, response) {
   const { url, method } = cacheKeyOpt;
-  const option = getOptionByUrl(url, method);
+  const option = getOptionByUrl({url, method});
   if (!option) {
     return "no option";
   }

@@ -4,6 +4,7 @@ import {
   LOCALSTORAGE_TYPE_DEFAULT,
   LOCALSTORAGE_TYPE,
   FOREVER_TYPE,
+  LOCALSTORAGE_KEY,
 } from "../shared/constants";
 import utils from "../utils";
 import { getOptionByUrl, getOptionKey } from "../option";
@@ -51,7 +52,7 @@ export function sortParams(params) {
 export function setHttpCache(cacheKey, value) {
   let createTime = new Date() - 0;
   let { url, method } = parseCacheKey(cacheKey);
-  let option =getOptionByUrl(url, method) ?? {}
+  let option =getOptionByUrl({url, method}) ?? {}
   let { local = LOCALSTORAGE_TYPE_DEFAULT } = option;
   let cacheData = getTCacheByOption(option)
   let data = {
@@ -59,11 +60,15 @@ export function setHttpCache(cacheKey, value) {
     data: value,
   };
   value._cacheKey = encodeCacheKey(cacheKey,createTime);
+  if(utils.isNumber(option.keepTime)&&option.keepTime<0){
+    console.log("not setCache")
+    return
+  }
   cacheData.add(cacheKey, data);
   //判断配置存储位置，如果是storage则存储到storage一份
   if (local === LOCALSTORAGE_TYPE) {
     let localCacheKey = getLocalCacheKey(cacheKey);
-    localStorage && localStorage.setItem(localCacheKey, stringify(data));
+    localStorage && localStorage.setItem(localCacheKey, utils.stringify(data));
   }
 }
 
@@ -76,8 +81,13 @@ export function encodeCacheKey(cacheKey,createTime){
 
 //对外暴露的根据key值获取cache的方法
 export function getCacheByKey(cacheKey){
-  cacheKey = decodeCacheKey(cacheKey);
-  return getHttpCacheByKey(cacheKey)
+  try {
+    cacheKey = decodeCacheKey(cacheKey);
+    return getHttpCacheByKey(cacheKey)
+  } catch (error) {
+    throw new Error("cacheKey is not exact");
+  }
+  
 }
 //对外cacheKey暴露解密方法
 export function decodeCacheKey(cacheKey){
@@ -87,8 +97,9 @@ export function decodeCacheKey(cacheKey){
 }
 
 //设置http接口返回值缓存
-export function setStorgeHttpCache(name, value) {
-  cacheData.add(name, value);
+export function setStorgeHttpCache(cacheKey, value) {
+  //let { url, method } = parseCacheKey(cacheKey);
+  cacheData.add(cacheKey, value);
 }
 
 //TODO 暂时考虑更新缓存，删除过期缓存数据
@@ -111,7 +122,7 @@ export function deleteHttpCacahe(cacheKey) {
 //获取http接口返回值缓存
 export function getHttpCacheByKey(cacheKey) {
   let { url, method } = parseCacheKey(cacheKey);
-  let option = getOptionByUrl(url, method) ?? {};
+  let option = getOptionByUrl({url, method}) ?? {};
   let cData = getTCacheByOption(option).get(cacheKey)
   let isExcludesUrlKey = isExcludesUrl(option, url);
   if (!cData || isExcludesUrlKey) {

@@ -24,8 +24,8 @@ export function apiMixin(THCache) {
     setDebugger,
   };
   Object.keys(api).forEach((key) => {
-    THCache.prototype[key] = function(...e){
-      return api[key].call(this,...e);
+    THCache.prototype[key] = function (...e) {
+        return api[key].call(this, ...e);
     };
   });
 }

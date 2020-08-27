@@ -30,11 +30,11 @@
             url:"http://jsonplaceholder.typicode.com",
             type:"fuzzy",
             method:"post",
-           // keepTime:5000,
-            keepTime:"trigger",
+            keepTime:10000,
+            //keepTime:"trigger",
             //keepTime:"forever",
-            excludeAttrs:["firstName","lastName"]
-            //local:"storage",
+            excludeAttrs:["firstName","lastName"],
+            local:"storage",
             //excludes:["http://jsonplaceholder.typicode.com/users"],
             
         },
@@ -107,7 +107,7 @@
          //console.log(response);
          window.d2 = new Date()-0;
          console.log(2222222,response)
-        }).catch(e=>{console.log(e)})
+        })
         }
         function users1(){
             axios.post('http://jsonplaceholder.typicode.com/users', {
@@ -116,7 +116,7 @@
         }).then(function (response) {
          //console.log(response);
          console.log(2222222,response)
-        }).catch(e=>{console.log(e)})
+        })
         }
         
 

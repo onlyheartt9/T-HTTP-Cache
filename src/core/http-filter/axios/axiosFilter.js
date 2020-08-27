@@ -65,9 +65,10 @@ function axiosFilter(data) {
   if (!_isCache) {
     let err = data;
     //urlLoading中清除该请求
-    let cacheKey = utils.compose(getCacheKeyOptByRequest,getCacheKey)(config);
-    //let cacheKey = getCacheKey(getCacheKeyOptByRequest(config))
-    removeUrlLoading(cacheKey);
+    if(config){
+      let cacheKey = utils.compose(getCacheKeyOptByRequest,getCacheKey)(config);
+      removeUrlLoading(cacheKey);
+    }
     return new Promise((resolve, reject) => {
       reject(err);
     })
