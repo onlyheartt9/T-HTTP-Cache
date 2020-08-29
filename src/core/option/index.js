@@ -77,8 +77,13 @@ export function setOption(option) {
   return parseOption(option);
 }
 
+export function removeOptionByKey(optKey){
+  optKey = decodeOptionKey(optKey)
+  removeOption(optKey);
+}
+
 //根据optKey删除配置项
-export function removeOptionByKey(optKey) {
+function removeOption(optKey) {
   new TCache(optKey).destory();
   preciseMap.remove(optKey);
   fuzzyMap.remove(optKey);
@@ -86,10 +91,10 @@ export function removeOptionByKey(optKey) {
 
 //解析option选项，缓存到缓存类中
 export function parseOption(option) {
-  let { type } = checkOption(option);
+  option = checkOption(option);
   let optKey = getOptionKey(option);
-  removeOptionByKey(optKey);
-  let map = type === PRECISE_TYPE ? preciseMap : fuzzyMap;
+  removeOption(optKey);
+  let map = option.type === PRECISE_TYPE ? preciseMap : fuzzyMap;
   map.add(optKey, option);
   return encodeOptionKey(optKey);
 }

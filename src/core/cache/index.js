@@ -10,6 +10,7 @@ import utils from "../utils";
 import { getOptionByUrl, getOptionKey } from "../option";
 
 const cacheData = new TCache(HTTP_CACHE_DATA);
+const defaultKeepTime = 3000;
 
 //封装缓存key值
 export function getCacheKey({ url, params, data, method }) {
@@ -61,7 +62,6 @@ export function setHttpCache(cacheKey, value) {
   };
   value._cacheKey = encodeCacheKey(cacheKey,createTime);
   if(utils.isNumber(option.keepTime)&&option.keepTime<0){
-    console.log("not setCache")
     return
   }
   cacheData.add(cacheKey, data);
@@ -97,6 +97,7 @@ export function decodeCacheKey(cacheKey){
 }
 
 //设置http接口返回值缓存
+//TODO 需要修改
 export function setStorgeHttpCache(cacheKey, value) {
   //let { url, method } = parseCacheKey(cacheKey);
   cacheData.add(cacheKey, value);
@@ -117,19 +118,23 @@ export function getTCacheByOption(option){
 
 //删除指定缓存
 export function deleteHttpCacahe(cacheKey) {
-  cacheData.remove(cacheKey);
+  let { url, method } = parseCacheKey(cacheKey);
+  let option = getOptionByUrl({url, method}) ?? {};
+  let tcache = getTCacheByOption(option);
+  tcache.remove(cacheKey);
 }
+
 //获取http接口返回值缓存
 export function getHttpCacheByKey(cacheKey) {
   let { url, method } = parseCacheKey(cacheKey);
   let option = getOptionByUrl({url, method}) ?? {};
-  let cData = getTCacheByOption(option).get(cacheKey)
+  let cache = getTCacheByOption(option).get(cacheKey)
   let isExcludesUrlKey = isExcludesUrl(option, url);
-  if (!cData || isExcludesUrlKey) {
+  if (!cache || isExcludesUrlKey) {
     return null;
   }
 
-  let { data, createTime } = cData;
+  let { data, createTime } = cache;
   let { keepTime = defaultKeepTime } = option;
   if (keepTime !== FOREVER_TYPE&&keepTime!=="trigger") {
     keepTime = keepTime - 0;
@@ -142,9 +147,6 @@ export function getHttpCacheByKey(cacheKey) {
 
   return utils.clone(data, {
     excludeAttrs: ["request"],
-    attrs: {
-      isCache: true,
-    },
   });
 }
 //判断url是否为配置项中不包含的

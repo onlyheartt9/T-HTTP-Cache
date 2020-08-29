@@ -33,7 +33,7 @@
             keepTime:10000,
             //keepTime:"trigger",
             //keepTime:"forever",
-            excludeAttrs:["firstName","lastName"],
+            //excludeAttrs:["firstName","lastName"],
             local:"storage",
             //excludes:["http://jsonplaceholder.typicode.com/users"],
             
@@ -101,7 +101,7 @@
             window.d1 = new Date()-0;
             axios.post('http://jsonplaceholder.typicode.com/users', {
             firstName: 'Fred',
-            lastName: 'Flintstone',
+            lastName: '仝壮壮',
             _trigger:true
         }).then(function (response) {
          //console.log(response);

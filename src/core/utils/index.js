@@ -1,4 +1,3 @@
-
 ////////////////////////////////////////////////export default//////////////////////////////////////////////////////////
 var toString = Object.prototype.toString;
 //克隆对象
@@ -41,7 +40,7 @@ function bind(fn, thisArg) {
 }
 
 /**
- * 将b对象的属性继承到a上面
+ * 将b对象的属性继承到a上面，浅拷贝
  */
 function extend(a, b, thisArg) {
   for (let key in b) {
@@ -75,26 +74,7 @@ function isArray(val) {
   return toString.call(val) === "[object Array]";
 }
 
-//对象合并
-function merge(/* obj1, obj2, obj3, ... */) {
-  var result = {};
-  function assignValue(val, key) {
-    if (isPlainObject(result[key]) && isPlainObject(val)) {
-      result[key] = merge(result[key], val);
-    } else if (isPlainObject(val)) {
-      result[key] = merge({}, val);
-    } else if (isArray(val)) {
-      result[key] = val.slice();
-    } else {
-      result[key] = val;
-    }
-  }
 
-  for (var i = 0, l = arguments.length; i < l; i++) {
-    forEach(arguments[i], assignValue);
-  }
-  return result;
-}
 //是否为字符串
 function isString(val) {
   return typeof val === "string";
@@ -108,32 +88,6 @@ function isFunction(val) {
   return toString.call(val) === "[object Function]";
 }
 
-function forEach(obj, fn) {
-  // Don't bother if no value provided
-  if (obj === null || typeof obj === "undefined") {
-    return;
-  }
-
-  // Force an array if not already something iterable
-  if (typeof obj !== "object") {
-    /*eslint no-param-reassign:0*/
-    obj = [obj];
-  }
-
-  if (isArray(obj)) {
-    // Iterate over array values
-    for (var i = 0, l = obj.length; i < l; i++) {
-      fn.call(null, obj[i], i, obj);
-    }
-  } else {
-    // Iterate over object keys
-    for (var key in obj) {
-      if (Object.prototype.hasOwnProperty.call(obj, key)) {
-        fn.call(null, obj[key], key, obj);
-      }
-    }
-  }
-}
 
 //函数组合
 const compose = (...[first, ...others]) => (...args) => {
@@ -144,13 +98,27 @@ const compose = (...[first, ...others]) => (...args) => {
   return ret;
 };
 
+
+// const encodeMap = new TCache("encodeMap");
+//编码
+// function encode(str){
+//   return escape(str)
+// }
+// //解码
+// function decode(str){
+//   return decodeURIComponent(atob(str))
+// }
+const encodeMap = [];
 //编码
 function encode(str){
-  return window.btoa(str)
+  if(!encodeMap.includes(str)){
+    encodeMap.push(str);
+  }
+  return encodeMap.indexOf(str);
 }
 //解码
-function decode(str){
-  return window.atob(str)
+function decode(index){
+  return encodeMap[index];
 }
 
 export default {
@@ -160,10 +128,8 @@ export default {
   bind,
   extend,
   isPlainObject,
-  merge,
   isArray,
   isUndefined,
-  forEach,
   isString,
   isNumber,
   isFunction,

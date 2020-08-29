@@ -125,7 +125,7 @@ axios({
 {
   url: "/aaa",//需要拦截处理的路径
   type: "precise" || "fuzzy",//拦截请求的模式，是精准匹配还是模糊匹配，默认precise
-  keepTime: 3000 || "forever"||"trigger",//缓存时效配置，分为有限，无限和触发三种模式，默认3000
+  keepTime: 3000 || "forever"||"trigger"||-1,//缓存时效配置，分为有限，无限和触发三种模式，默认3000
   local: "defalut" || "storage",//缓存存储位置配置，可以存在闭包内或localStorage中
   excludes: ["/aaa/bbb"],//模糊匹配时使用，对指定url不再拦截处理
   excludeAttrs:["name"],//对拦截到的请求，相关参数不做匹配处理
