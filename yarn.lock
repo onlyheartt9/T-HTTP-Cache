@@ -1052,10 +1052,10 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@onlyheartt9/t-cache@^1.0.4":
-  version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@onlyheartt9/t-cache/-/t-cache-1.0.4.tgz#8d8b152db3c1b95542ccd80e9a3a08ab5dc1eb83"
-  integrity sha512-QICY8J6bUUnzcGqmBkk1pW2gGJ9H2ACtaxWNui1Q9TVnRfvqYuxi3MVC4QOY1gwSwD95TZuC9TOfK5dqgAqO/g==
+"@onlyheartt9/t-cache@^1.0.10":
+  version "1.0.10"
+  resolved "https://registry.yarnpkg.com/@onlyheartt9/t-cache/-/t-cache-1.0.10.tgz#3d50e201b90ab11c9b4052e01efd1659fb3755a7"
+  integrity sha512-HaIRuxXAAhzyOzyfLJzNUM91xPyufRCkXgVYNQz4WgiMr4pR6ueDkiKyMByCnnkgI7+PQqGjTNuUnFVzSjJoNw==
 
 "@sinonjs/commons@^1.7.0":
   version "1.8.1"
