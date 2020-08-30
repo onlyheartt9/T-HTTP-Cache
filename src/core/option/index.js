@@ -1,3 +1,4 @@
+
 import TCache from "@onlyheartt9/t-cache";
 import utils from "../utils/index";
 import { isExcludesUrl } from "../cache/index";
@@ -77,9 +78,19 @@ export function setOption(option) {
   return parseOption(option);
 }
 
-export function removeOptionByKey(optKey){
-  optKey = decodeOptionKey(optKey)
+export function removeOptionByKey(optKey) {
+  optKey = decodeOptionKey(optKey);
   removeOption(optKey);
+  removeLocalCache(optKey);
+}
+
+//配置项对应的存储在storage的缓存删除
+function removeLocalCache(optKey) {
+  Object.keys(localStorage).forEach((key) => {
+    if (key.indexOf(optKey)) {
+      localStorage.removeItem(key);
+    }
+  });
 }
 
 //根据optKey删除配置项

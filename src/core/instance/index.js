@@ -1,16 +1,10 @@
-import { initMixin } from "./init";
 import { apiMixin } from "./api";
 
-
-function THCache() {
-  options && this._init();
+function THCache(options) {
+    options&&this.setOptions(options);
 }
 
-initMixin(THCache);
 apiMixin(THCache);
-
-
-
 
 
 export default THCache;

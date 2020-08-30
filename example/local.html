@@ -10,13 +10,14 @@
   </head>
   <body></body>
   <script>
+    //发出请求后刷新页面重新请求看效果
     let options = [
       {
         url: "http://jsonplaceholder.typicode.com",
         type: "fuzzy",
-        method: "all",
+        method: "get", //参数分正常请求method类型 和all
         keepTime: "forever",
-        excludes: ["http://jsonplaceholder.typicode.com/users"],
+        local:"storage"
       }
     ];
     let thc = new THCache();
@@ -25,29 +26,21 @@
 
     function users() {
       axios
-        .post("http://jsonplaceholder.typicode.com/users", {
+        .get("http://jsonplaceholder.typicode.com/users", {
+          params:{
           firstName: "Fred",
           lastName: "Flintstone",
+        }
         })
         .then(function (response) {
-          console.log("response",response);
-        })
+          console.log("method users", response);
+        });
     }
-    function posts() {
-      axios
-        .post("http://jsonplaceholder.typicode.com/posts", {
-          name:"name"
-        })
-        .then(function (response) {
-          console.log("method posts:", response.data);
-        })
-    };
-    
+
     function contrast(){
-      users();
-      posts();
+      users()
     }
-    //配置项中excludes 包含users请求，所以该请求不能使用该配置项，会重复发出请求，请求数据不会被缓存
-    setInterval(contrast,2000)
+
+    setInterval(contrast, 5000);
   </script>
 </html>

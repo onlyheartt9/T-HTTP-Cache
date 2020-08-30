@@ -15,14 +15,20 @@
       {
         url: "http://jsonplaceholder.typicode.com",
         type: "fuzzy",
-        method: "post",
+        method: "all",
         keepTime: "forever",
-        //excludeAttrs: ["firstName", "lastName"],
+        excludeAttrs: ["lastName"],
+      },
+      {
+        url: "http://jsonplaceholder.typicode.com/posts",
+        type: "precise",
+        method: "all",
+        keepTime: "forever",
         excludeAttrs: "all",
       },
     ];
-    let a = new THCache();
-    let optKeys = a.setOptions(options);
+    let thc = new THCache();
+    let optKeys = thc.setOptions(options);
     axios = TBindAxios(axios);
 
     function users() {
@@ -32,20 +38,49 @@
           lastName: "last",
         })
         .then(function (response) {
-          console.log("response", response);
+          console.log("method users:", response.data);
         })
     }
     function users1() {
       axios
         .post("http://jsonplaceholder.typicode.com/users", {
+          firstName: "first",
+          lastName: "next",
+        })
+        .then(function (response) {
+          console.log("method users1:", response.data);
+        })
+    }
+
+    function posts() {
+      axios
+        .post("http://jsonplaceholder.typicode.com/posts", {
+          name:"name"
+        })
+        .then(function (response) {
+          console.log("method posts:", response.data);
+        })
+    }
+    function posts1() {
+      axios
+        .post("http://jsonplaceholder.typicode.com/posts", {
           firstName: "next",
           lastName: "next",
         })
         .then(function (response) {
-          console.log("response", response);
+          console.log("method posts1:", response.data);
         })
     }
-    users();
-    setTimeout(users1,3000)
+    //excludeAttrs 数组 对部分参数属性不做对比
+    function contrast(){
+      users();
+      setTimeout(users1,3000)
+    }
+    //excludeAttrs all 对全部参数属性不做对比
+    function contrast1(){
+      posts();
+      setTimeout(posts1,3000)
+    }
+    
 </script>
 </html>

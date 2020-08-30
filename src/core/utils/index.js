@@ -30,7 +30,7 @@ function parse(data) {
 
 //克隆一个方法
 function bind(fn, thisArg) {
-  return function wrap() {
+  return function () {
     var args = new Array(arguments.length);
     for (var i = 0; i < args.length; i++) {
       args[i] = arguments[i];
@@ -99,7 +99,6 @@ const compose = (...[first, ...others]) => (...args) => {
 };
 
 
-// const encodeMap = new TCache("encodeMap");
 //编码
 // function encode(str){
 //   return escape(str)

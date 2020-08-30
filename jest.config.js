@@ -1,7 +1,7 @@
 module.exports = {
   // if you're also using typescript
   preset: "ts-jest",
-  testEnvironment: "node",
+  testEnvironment: "jsdom",
   verbose: true,
   // registers babel.config.js with jest
   transform: {

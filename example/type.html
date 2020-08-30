@@ -14,10 +14,15 @@
       {
         url: "http://jsonplaceholder.typicode.com",
         type: "fuzzy",
-        method: "all",
+        method: "get", //参数分正常请求method类型 和all
+        keepTime: -1,
+      },
+      {
+        url: "http://jsonplaceholder.typicode.com",
+        type: "fuzzy",
+        method: "post", //参数分正常请求method类型 和all
         keepTime: "forever",
-        excludes: ["http://jsonplaceholder.typicode.com/users"],
-      }
+      },
     ];
     let thc = new THCache();
     let optKeys = thc.setOptions(options);
@@ -25,29 +30,30 @@
 
     function users() {
       axios
-        .post("http://jsonplaceholder.typicode.com/users", {
+        .get("http://jsonplaceholder.typicode.com/users", {
           firstName: "Fred",
           lastName: "Flintstone",
         })
         .then(function (response) {
-          console.log("response",response);
-        })
+          console.log("method users", response);
+        });
     }
+
     function posts() {
       axios
         .post("http://jsonplaceholder.typicode.com/posts", {
-          name:"name"
+          name: "name",
         })
         .then(function (response) {
           console.log("method posts:", response.data);
-        })
-    };
-    
-    function contrast(){
-      users();
-      posts();
+        });
     }
-    //配置项中excludes 包含users请求，所以该请求不能使用该配置项，会重复发出请求，请求数据不会被缓存
-    setInterval(contrast,2000)
+
+    function contrast(){
+      users()
+      posts()
+    }
+
+    setInterval(contrast, 5000);
   </script>
 </html>

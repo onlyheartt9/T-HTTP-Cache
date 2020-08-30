@@ -10,12 +10,13 @@
   </head>
   <body></body>
   <script>
+
     let options = [
       {
         url: "http://jsonplaceholder.typicode.com",
         type: "fuzzy",
-        method: "post",
-        keepTime: 5000,
+        method: "all",
+        keepTime: 5000,//还有 -1,forever,trigger参数可以使用
         excludes: ["http://jsonplaceholder.typicode.com/users"],
       }
     ];

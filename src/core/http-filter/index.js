@@ -17,7 +17,7 @@ export function debug(callback) {
 }
 
 //根据配置项excludeAttrs，处理cacheKeyOpt,返回是否为trigger操作
-function dealCacheKeyOption(option, cacheKeyOpt) {
+export function dealCacheKeyOption(option, cacheKeyOpt) {
   const { params, data } = cacheKeyOpt;
   let trigger = data._trigger||params._trigger;
   let { excludeAttrs = [] } = option;

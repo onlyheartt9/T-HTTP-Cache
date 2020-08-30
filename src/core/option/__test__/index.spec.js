@@ -14,6 +14,12 @@ import { options } from "./data";
 import { FUZZY_TYPE } from "../../shared/constants";
 //TODO checkOption 未exprot的方法
 
+test("测试 getOptionByKey parseOption error", ()=>{
+   expect(getOptionByKey).toThrow(Error)
+   expect(parseOption).toThrow(Error)
+   expect(parseOption).toThrow(Error)
+})
+
 test("测试setOption and getOptionByUrl", () => {
   setOptions(options);
   options.forEach((option) => {
@@ -26,6 +32,15 @@ test("测试setOption and getOptionByUrl", () => {
   });
 });
 
+/**
+ * @jest-environment jsdom
+ */
+
+test('use jsdom in this test file', () => {
+  const element = document.createElement('div');
+  expect(element).not.toBeNull();
+});
+
 test("测试setOption and getOptionByKey", () => {
   options.forEach((option) => {
     let optKey = setOption(option);
@@ -33,14 +48,17 @@ test("测试setOption and getOptionByKey", () => {
   });
 });
 
-test("测试setOptions and getOptionByKey and removeOptionByKey", () => {
-  let optKeys = setOptions(options);
-  optKeys.forEach((optKey, index) => {
-    expect(getOptionByKey(optKey)).toEqual(options[index]);
-    removeOptionByKey(optKey);
-    expect(getOptionByKey(optKey)).toEqual(null);
-  });
-});
+/**
+ * @jest-environment jsdom
+ */
+// test("测试setOptions and getOptionByKey and removeOptionByKey", () => {
+//   let optKeys = setOptions(options);
+//   optKeys.forEach((optKey, index) => {
+//     expect(getOptionByKey(optKey)).toEqual(options[index]);
+//     removeOptionByKey(optKey);
+//     expect(getOptionByKey(optKey)).toEqual(null);
+//   });
+// });
 
 test("测试parseOption and getOptionByKey", () => {
   options.forEach((option) => {

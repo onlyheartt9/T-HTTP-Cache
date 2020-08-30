@@ -2,10 +2,10 @@
 let options = [{
   url: "/aaa",
   type: "precise" || "fuzzy",
-  keepTime: 3 || "forever"||"trigger",
+  keepTime: 3000 || "forever"||"trigger"||-1,
   local: "defalut" || "storage",
   excludes: ["/aaa/bbb"],
-  excludeAttrs:["name"],
+  excludeAttrs:["name"]||"all",
   dataFormat:()=>{},
-  method: "get"
+  method: "get"||"all"
 }]

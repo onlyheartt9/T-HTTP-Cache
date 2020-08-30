@@ -10,13 +10,17 @@
   </head>
   <body></body>
   <script>
+
     let options = [
       {
         url: "http://jsonplaceholder.typicode.com",
         type: "fuzzy",
         method: "all",
-        keepTime: "forever",
-        excludes: ["http://jsonplaceholder.typicode.com/users"],
+        keepTime:"forever",
+        dataFormat:(res)=>{
+          res["dataFormat"] = true;
+          return res
+        }
       }
     ];
     let thc = new THCache();
@@ -30,24 +34,9 @@
           lastName: "Flintstone",
         })
         .then(function (response) {
-          console.log("response",response);
+          console.log("dataFormat",response.dataFormat);
         })
     }
-    function posts() {
-      axios
-        .post("http://jsonplaceholder.typicode.com/posts", {
-          name:"name"
-        })
-        .then(function (response) {
-          console.log("method posts:", response.data);
-        })
-    };
-    
-    function contrast(){
-      users();
-      posts();
-    }
-    //配置项中excludes 包含users请求，所以该请求不能使用该配置项，会重复发出请求，请求数据不会被缓存
-    setInterval(contrast,2000)
+    setInterval(users,2000)
   </script>
 </html>

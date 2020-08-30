@@ -16,7 +16,11 @@ import { LOCALSTORAGE_KEY, PRECISE_TYPE } from "../../shared/constants";
 import { options } from "../../option/__test__/data.js";
 import { setOptions, getOptionByUrl } from "../../option/index";
 import { cacheKeys } from "./data";
+import utils from "../../utils"
 
+test("测试getCacheByKey",()=>{
+  expect(getCacheByKey).toThrow(Error)
+})
 
 test("测试setHttpCache and getCacheByKey and getTCacheByOption and deleteHttpCacahe", () => {
   setOptions(options);
@@ -24,11 +28,12 @@ test("测试setHttpCache and getCacheByKey and getTCacheByOption and deleteHttpC
     setHttpCache(key.cacheKey, key.response);
     let cacheKey = encodeCacheKey(key.cacheKey, new Date() - 0);
     let option = getOptionByUrl(key.param);
-    if (option) {
+    let keepTime = (option&&(option.keepTime||option.keepTime===-1))?option.keepTime:3000;
+    if (option&&keepTime!==-1) {
       let tcache = getTCacheByOption(option);
       expect(tcache.getKeys().includes(key.cacheKey)).toEqual(true);
     }
-    expect(getCacheByKey(cacheKey)).toEqual(key.response);
+    keepTime!==-1&&expect(getCacheByKey(cacheKey)).toEqual(key.response);
     deleteHttpCacahe(key.cacheKey);
     expect(getCacheByKey(cacheKey)).toEqual(null);
   });
@@ -42,21 +47,33 @@ test("测试getCacheKey", () => {
 
 test("测试parseCacheKey", () => {
   cacheKeys.forEach((key) => {
-    expect(parseCacheKey(key.cacheKey)).toEqual(key.param);
+    let param = JSON.parse(JSON.stringify(key.param));
+    if(utils.isString(param.data)){
+      param.data = utils.parse(param.data)
+    }
+    if(utils.isString(param.params)){
+      param.params = utils.parse(param.params)
+    }
+    expect(parseCacheKey(key.cacheKey)).toEqual(param);
   });
 });
 
 test("测试getLocalCacheKey", () => {
   cacheKeys.forEach((key) => {
-    expect(getLocalCacheKey(key.cacheKey)).toEqual(
-      LOCALSTORAGE_KEY + key.cacheKey
+    let data = {cacheKey:key.cacheKey,optKey:"optKey"};
+    expect(getLocalCacheKey(data)).toEqual(
+      LOCALSTORAGE_KEY + utils.stringify(data)
     );
   });
 });
 
 test("测试sortParams", () => {
   cacheKeys.forEach((key) => {
-    expect(sortParams(key.param.params)).toEqual(key.param.params);
+    let params = key.param.params;
+    if(utils.isString(params)){
+      params = utils.parse(params)
+    }
+    expect(sortParams(params)).toEqual(params);
   });
 });
 //TODO
