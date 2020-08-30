@@ -1,6 +1,7 @@
 import { getOptionByUrl } from "../option/index";
 import { getCacheKey, setHttpCache, getHttpCacheByKey } from "../cache/index";
 import { TRIGGER_TYPE } from "../shared/constants";
+import utils from "../utils";
 export const http = {
   lib: null,
   type: "",
@@ -15,17 +16,24 @@ export function debug(callback) {
   }
 }
 
+//根据配置项excludeAttrs，处理cacheKeyOpt,返回是否为trigger操作
 function dealCacheKeyOption(option, cacheKeyOpt) {
   const { params, data } = cacheKeyOpt;
   let trigger = data._trigger||params._trigger;
   let { excludeAttrs = [] } = option;
   if(option.keepTime===TRIGGER_TYPE){
-    !excludeAttrs.includes("_trigger")&&excludeAttrs.push("_trigger")
+    utils.isArray(excludeAttrs)&&!excludeAttrs.includes("_trigger")&&excludeAttrs.push("_trigger")
   }
-  excludeAttrs.forEach((attr) => {
-    delete cacheKeyOpt.params[attr];
-    delete cacheKeyOpt.data[attr];
-  });
+  if(utils.isArray(excludeAttrs)){
+    excludeAttrs.forEach((attr) => {
+      delete cacheKeyOpt.params[attr];
+      delete cacheKeyOpt.data[attr];
+    });
+  }else if(excludeAttrs==="all"){
+    cacheKeyOpt.params = {}
+    cacheKeyOpt.data = {}
+  }
+  
   return trigger
 }
 

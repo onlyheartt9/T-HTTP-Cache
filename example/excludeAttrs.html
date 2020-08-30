@@ -17,7 +17,8 @@
         type: "fuzzy",
         method: "post",
         keepTime: "forever",
-        excludeAttrs: ["firstName", "lastName"],
+        //excludeAttrs: ["firstName", "lastName"],
+        excludeAttrs: "all",
       },
     ];
     let a = new THCache();
@@ -45,6 +46,6 @@
         })
     }
     users();
-    setTimeout(user1,3000)
+    setTimeout(users1,3000)
 </script>
 </html>

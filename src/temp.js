@@ -6,5 +6,6 @@ let options = [{
   local: "defalut" || "storage",
   excludes: ["/aaa/bbb"],
   excludeAttrs:["name"],
+  dataFormat:()=>{},
   method: "get"
 }]
