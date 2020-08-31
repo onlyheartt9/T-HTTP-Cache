@@ -72,9 +72,8 @@ export function setHttpCache(cacheKey, value) {
 
 //对外cacheKey暴露加密方法
 export function encodeCacheKey(cacheKey, createTime) {
-  let cacheKeyOpt = parseCacheKey(cacheKey);
-  cacheKeyOpt.createTime = createTime;
-  return utils.encode(utils.stringify(cacheKeyOpt));
+  cacheKey = utils.encode(cacheKey);
+  return utils.stringify({createTime,key:cacheKey});
 }
 
 //对外暴露的根据key值获取cache的方法
@@ -88,9 +87,10 @@ export function getCacheByKey(cacheKey) {
 }
 //对外cacheKey暴露解密方法
 export function decodeCacheKey(cacheKey) {
-  let cacheKeyOpt = utils.parse(utils.decode(cacheKey));
-  delete cacheKeyOpt.createTime;
-  return utils.stringify(cacheKeyOpt);
+  let {key} = utils.parse(cacheKey);
+  cacheKey = utils.decode(key);
+  //delete cacheKeyOpt.createTime;
+  return cacheKey;
 }
 
 //TODO 暂时考虑更新缓存，删除过期缓存数据

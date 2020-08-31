@@ -62,14 +62,14 @@ let optKey = thc.setOption({
        url:"",
        type:"fuzzy",
        method:"all",
-       keepTime:0
+       keepTime:-1
 });
 axios({
        method:"GET",
        url:"http://jsonplaceholder.typicode.com/users",
        data:{
            firstName: 'Fred',
-           lastName: 'Flintstone
+           lastName: 'Flintstone'
        }
 }).then(res=>{
     console.log(res._cacheKey)
@@ -128,7 +128,7 @@ axios({
   keepTime: 3000 || "forever"||"trigger"||-1,//缓存时效配置，分为有限，无限和触发三种模式，默认3000
   local: "defalut" || "storage",//缓存存储位置配置，可以存在闭包内或localStorage中
   excludes: ["/aaa/bbb"],//模糊匹配时使用，对指定url不再拦截处理
-  excludeAttrs:["name"],//对拦截到的请求，相关参数不做匹配处理
+  excludeAttrs:["name"]||"all",//对拦截到的请求，相关参数不做匹配处理
   method: "get"||"all"//请求格式配置项，all为所有格式
   dataFormat:(data)=>data //数据预处理方法，对返回值进行处理
 }

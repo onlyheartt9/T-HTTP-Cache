@@ -16,7 +16,8 @@
         url: "http://jsonplaceholder.typicode.com",
         type: "fuzzy",
         method: "all",
-        keepTime: 5000,//还有 -1,forever,trigger参数可以使用
+        keepTime: "trigger",//还有 -1,forever,trigger参数可以使用
+        excludeAttrs:"all"
       }
     ];
     let thc = new THCache();
