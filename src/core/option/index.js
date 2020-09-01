@@ -38,9 +38,9 @@ function decodeOptionKey(optKey) {
 //通过url获取配置项
 export function getOptionByUrl({ url, method = "all" }) {
   let optKey = getOptionKey({ url, method, type: PRECISE_TYPE });
-  let opt = preciseMap.get(optKey);
+  let optKey_all = getOptionKey({ url, method:"all", type: PRECISE_TYPE });
+  let opt = preciseMap.get(optKey)??preciseMap.get(optKey_all);
   if (!opt) {
-    let options = [];
     opt = getFuzzyOptionByUrl(url, method);
   }
   return opt;
@@ -49,7 +49,6 @@ export function getOptionByUrl({ url, method = "all" }) {
 //模糊查询，根据请求类型，请求路径获取配置项，如果没有则使用all类型配置
 function getFuzzyOptionByUrl(url, method) {
   let arr = url.split("/");
-  let length = arr.length;
   let option = null;
   for (; arr.length > 0; ) {
     arr.pop();
