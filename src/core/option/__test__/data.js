@@ -5,6 +5,7 @@ export const options = [
     method: "post",
     keepTime: "trigger",
     excludeAttrs: "all",
+    loadType:"todo",
     excludes: ["http://jsonplaceholder.typicode.com/users"],
   },
   {
@@ -12,6 +13,7 @@ export const options = [
     type: "precise",
     method: "post",
     keepTime: 5000,
+    loadType:"todo",
     excludeAttrs: ["firstName", "lastName"],
   },
   {

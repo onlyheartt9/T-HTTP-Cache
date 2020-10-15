@@ -129,7 +129,8 @@ axios({
   local: "defalut" || "storage",//缓存存储位置配置，可以存在闭包内或localStorage中
   excludes: ["/aaa/bbb"],//模糊匹配时使用，对指定url不再拦截处理
   excludeAttrs:["name"]||"all",//对拦截到的请求，相关参数不做匹配处理
-  method: "get"||"all"//请求格式配置项，all为所有格式
+  method: "get"||"all",//请求格式配置项，all为所有格式
+  loadType: "default"||"todo",//符合条件的接口在pending状态下重复发出请求后，default是阻止执行，todo是等之前pending结束后再执行，默认default
   dataFormat:(data)=>data //数据预处理方法，对返回值进行处理
 }
 

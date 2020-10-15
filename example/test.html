@@ -16,11 +16,15 @@
         type: "precise", //根据情况自行配置
         method: "all", //根据情况自行配置
         keepTime: 3000,
+        loadType:"todo",
       },
     ];
     let thc = new THCache();
     let optKeys = thc.setOptions(options);
     axios = TBindAxios(axios);
+    axios.interceptors.response.use(res=>{
+      return "333"
+    })
 
     function users() {
       axios

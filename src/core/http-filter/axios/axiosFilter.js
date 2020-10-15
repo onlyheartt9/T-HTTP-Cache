@@ -1,10 +1,24 @@
-import { getCacheKeyOptByRequest, getCacheKeyOptByResponse } from "./axiosUtils"
-import { commonRequestFilter, commonResponseFilter, urlLoading, removeUrlLoading } from "../index";
+import {
+  getCacheKeyOptByRequest,
+  getCacheKeyOptByResponse,
+} from "./axiosUtils";
+import {
+  commonRequestFilter,
+  commonResponseFilter,
+  urlLoading,
+  removeUrlLoading,
+} from "../index";
 import utils from "../../utils/index";
-import { METHODS } from "../../shared/constants"
+import { METHODS } from "../../shared/constants";
 import { getCacheKey } from "../../cache";
+
+//请求filter对应下标
+let reqNum = -1;
+//响应filter对应下标
+let resNum = -1;
+
 /**
- *
+ * 封装axios入口方法
  * @param {*} axios  axios
  */
 export function registerAxiosFilter(axios) {
@@ -24,11 +38,11 @@ export function registerAxiosFilter(axios) {
 //对axios代理拦截处理，判断请求是否有缓存，返回缓存或请求接口
 function createNewAxios(axios) {
   let newAxios = function (...e) {
-    return axios(...e).catch(data => {
-      return axiosFilter(data);
-    })
+    return axios(...e).catch((data) => {
+      return axiosFilter(data, axios);
+    });
   };
-  utils.extend(newAxios, axios, axios)
+  utils.extend(newAxios, axios, axios);
   return newAxios;
 }
 
@@ -46,13 +60,13 @@ function registerHttpFilter(axiosObj) {
 //方法扩展
 function extendMethods(axiosObj) {
   const methods = METHODS;
-  methods.forEach(methodName => {
+  methods.forEach((methodName) => {
     let method = axiosObj[methodName];
     axiosObj[methodName] = function (...e) {
       return method(...e).catch((data) => {
-        return axiosFilter(data);
+        return axiosFilter(data, axiosObj);
       });
-    }
+    };
   });
 }
 //根据请求配置判断是否有缓存，如果没有执行callback函数
@@ -60,39 +74,57 @@ function extendMethods(axiosObj) {
  *
  * @param {*} data 警告，或者为缓存数据
  */
-function axiosFilter(data) {
-  let { config, type,_isCache=false} = data;
+function axiosFilter(data, axiosObj) {
+  let { config, type, promise, response, _isCache = false } = data;
   if (!_isCache) {
     let err = data;
     //urlLoading中清除该请求
-    if(config){
-      let cacheKey = utils.compose(getCacheKeyOptByRequest,getCacheKey)(config);
+    if (config) {
+      let cacheKey = utils.compose(
+        getCacheKeyOptByRequest,
+        getCacheKey
+      )(config);
       removeUrlLoading(cacheKey);
     }
     return new Promise((resolve, reject) => {
       reject(err);
-    })
+    });
   } else if (type === "loading") {
-    return new Promise(() => { });
+    return promise((res) => {
+      return dealResponse({ axiosObj, res });
+    });
   } else {
-    //上述条件都不是的话，type为缓存值
+    let res = dealResponse({ axiosObj, response });
     return new Promise((resolve) => {
-      resolve(type)
+      resolve(res);
     });
   }
 }
+
+//手动执行axios中的response拦截方法
+function dealResponse({ axiosObj, response }) {
+  let res = response;
+  let handlers = axiosObj.interceptors.response.handlers;
+  handlers.forEach((handler, index) => {
+    if (handler?.fulfilled && index !== resNum) {
+      res = handler.fulfilled(response);
+    }
+  });
+  return res;
+}
+
 //注册全局的axios request filter拦截
 function registerRequestFilter(axiosObj) {
-  let reqNum = -1;
   reqNum = axiosObj.interceptors.request.use(function (config) {
     const cacheKeyOpt = getCacheKeyOptByRequest(config);
-    let type = commonRequestFilter(cacheKeyOpt);
+    let { type, response, promise } = commonRequestFilter(cacheKeyOpt);
     if (type === "no option" || type === "normal") {
       return config;
     } else {
-      throw { config, type ,_isCache:true};
+      throw { config, promise, type, response, _isCache: true };
     }
   });
+  //将方法置顶
   let handlers = axiosObj.interceptors.request.handlers;
   let length = handlers.length;
   for (let num = 0; num < length; num++) {
@@ -107,27 +139,39 @@ function registerRequestFilter(axiosObj) {
 
 //注册全局的axios response filter拦截
 function registerResponseFilter(axiosObj) {
-  let resNum = -1;
+  //修改response.use方法，对reject做判断
   let responseUse = axiosObj.interceptors.response.use;
   axiosObj.interceptors.response.use = function (...e) {
-    let num = responseUse.call(this, ...e)
-    if (e[e.length - 1] !== "useFilter") {
-      axiosObj.interceptors.response.eject(resNum);
-      useFilter();
+    if (e[1]) {
+      let rejcet = e[1];
+      e[1] = function (error) {
+        if (!error._isCache) {
+          return rejcet(error);
+        }
+        return Promise.reject(error);
+      };
     }
+    let num = responseUse.call(this, ...e);
     return num;
-  }
-  useFilter();
-
-
-  function useFilter() {
-    resNum = axiosObj.interceptors.response.use((response) => {
-      const cacheKeyOpt = getCacheKeyOptByResponse(response);
-      let ret = commonResponseFilter(cacheKeyOpt, response);
-      if(ret ==="no option"){
-        return response;
-      }
-      return ret
-    }, "useFilter");
+  };
+  //注册response filter方法
+  resNum = axiosObj.interceptors.response.use((response) => {
+    const cacheKeyOpt = getCacheKeyOptByResponse(response);
+    let ret = commonResponseFilter(cacheKeyOpt, response);
+    if (ret.msg === "no option") {
+      return response;
+    }
+    return ret.res;
+  });
+  //将方法置顶
+  let handlers = axiosObj.interceptors.response.handlers;
+  let length = handlers.length;
+  for (let num = 0; num < length; num++) {
+    if (!handlers[num] || num === resNum) {
+      continue;
+    }
+    let handler = handlers[num];
+    handlers[num] = null;
+    handlers.push(handler);
   }
 }

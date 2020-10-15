@@ -10,29 +10,35 @@
   </head>
   <body></body>
   <script>
-
     let options = [
       {
         url: "http://jsonplaceholder.typicode.com",
         type: "fuzzy",
         method: "all",
-        keepTime: 5000,//还有 -1,forever,trigger参数可以使用
-      }
+        keepTime: 5000, //还有 -1,forever,trigger参数可以使用
+      },
     ];
     let thc = new THCache();
     let optKeys = thc.setOptions(options);
     axios = TBindAxios(axios);
-
+    const service = axios.create();
+    service.interceptors.response.use(
+      (res) => res.data,
+      (error) => {
+        console.log(error)
+        return Promise.reject(error);
+      }
+    );
     function users() {
-      axios
+      service
         .post("http://jsonplaceholder.typicode.com/users", {
           firstName: "Fred",
           lastName: "Flintstone",
         })
         .then(function (response) {
-          console.log("response",response);
-        })
+          console.log("response", response);
+        });
     }
-    setInterval(users,2000)
+    setInterval(users, 2000);
   </script>
 </html>

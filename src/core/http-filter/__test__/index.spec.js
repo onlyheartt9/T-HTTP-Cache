@@ -4,6 +4,7 @@ import {
   dealCacheKeyOption,
   commonRequestFilter,
   commonResponseFilter,
+  hasUrl,
   removeUrlLoading,
 } from "../index";
 import { setOptions, getOptionByUrl } from "../../option/index";
@@ -18,12 +19,17 @@ describe('test http-filter api', () => {
     setOptions(options);
     //http.debug = true
     cacheKeys.forEach((cacheKey) => {
-      let type =  commonRequestFilter(cacheKey.param);
+      let {type} =  commonRequestFilter(cacheKey.param);
       if(type==="no option"){
         return
       }
       expect(type).toEqual("normal");
-      expect(commonRequestFilter(cacheKey.param)).toEqual("loading");
+      let {type:t,promise} = commonRequestFilter(cacheKey.param);
+      expect(t).toEqual("loading");
+      promise(res=>res).then(res=>{
+        expect(res).toEqual(cacheKey.response);
+      })
+      
       removeUrlLoading(cacheKey.cacheKey);
     });
   });
@@ -31,27 +37,27 @@ describe('test http-filter api', () => {
   it("测试removeUrlLoading", () => {
     setOptions(options);
     cacheKeys.forEach((cacheKey) => {
-      urlLoading.push(cacheKey.cacheKey);
+      urlLoading[cacheKey.cacheKey]=[];
       removeUrlLoading(cacheKey.cacheKey);
-      expect(urlLoading.includes(cacheKey.cacheKey)).toEqual(false);
+      expect(hasUrl(cacheKey.cacheKey)).toEqual(false);
     });
   });
   
   it("测试commonRequestFilter and commonResponseFilter", () => {
     setOptions(options);
-    urlLoading.forEach(() => {
-      urlLoading.pop();
+    Object.keys(urlLoading).forEach(key=>{
+      delete urlLoading[key]
     });
   
     //http.debug = true
     cacheKeys.forEach((cacheKey) => {
-      let type = commonRequestFilter(cacheKey.param);
+      let {type} = commonRequestFilter(cacheKey.param);
       let ret =  commonResponseFilter(cacheKey.param, cacheKey.response);
       let option = getOptionByUrl(cacheKey.param)
       expect(["normal","no option","loading"].includes(type)).toEqual(true);
-      if(ret!=="no option"&&option.keepTime!==-1){
-        expect(ret).toEqual(cacheKey.response);
-        expect(commonRequestFilter(cacheKey.param)).toEqual(cacheKey.response);
+      if(ret.msg!=="no option"&&option.keepTime!==-1){
+        expect(ret.res).toEqual(cacheKey.response);
+        expect(commonRequestFilter(cacheKey.param).response).toEqual(cacheKey.response);
       }
       
     });
