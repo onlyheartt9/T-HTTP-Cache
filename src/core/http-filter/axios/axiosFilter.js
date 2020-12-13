@@ -69,9 +69,8 @@ function extendMethods(axiosObj) {
     };
   });
 }
-//根据请求配置判断是否有缓存，如果没有执行callback函数
 /**
- *
+ *根据请求配置判断是否有缓存，如果没有执行callback函数
  * @param {*} data 警告，或者为缓存数据
  */
 function axiosFilter(data, axiosObj) {
