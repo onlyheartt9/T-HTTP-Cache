@@ -1,6 +1,6 @@
 import {
-  getCacheKeyOptByRequest,
-  getCacheKeyOptByResponse,
+  getHttpConfigByResponse,
+  getHttpConfigByResponse,
 } from "./axiosUtils";
 import {
   commonRequestFilter,
@@ -80,7 +80,7 @@ function axiosFilter(data, axiosObj) {
     //urlLoading中清除该请求
     if (config) {
       let cacheKey = utils.compose(
-        getCacheKeyOptByRequest,
+        getHttpConfigByResponse,
         getCacheKey
       )(config);
       removeUrlLoading(cacheKey);
@@ -115,8 +115,8 @@ function dealResponse({ axiosObj, response }) {
 //注册全局的axios request filter拦截
 function registerRequestFilter(axiosObj) {
   reqNum = axiosObj.interceptors.request.use(function (config) {
-    const cacheKeyOpt = getCacheKeyOptByRequest(config);
-    let { type, response, promise } = commonRequestFilter(cacheKeyOpt);
+    const httpConfig = getHttpConfigByResponse(config);
+    let { type, response, promise } = commonRequestFilter(httpConfig);
     if (type === "no option" || type === "normal") {
       return config;
     } else {
@@ -155,8 +155,8 @@ function registerResponseFilter(axiosObj) {
   };
   //注册response filter方法
   resNum = axiosObj.interceptors.response.use((response) => {
-    const cacheKeyOpt = getCacheKeyOptByResponse(response);
-    let ret = commonResponseFilter(cacheKeyOpt, response);
+    const httpConfig = getHttpConfigByResponse(response);
+    let ret = commonResponseFilter(httpConfig, response);
     if (ret.msg === "no option") {
       return response;
     }
